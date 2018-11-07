@@ -1,3 +1,14 @@
+
+
+# offensive word database
+slang1.csv
+
+# venv
+venv/
+
+# cache
+*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
