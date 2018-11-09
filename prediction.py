@@ -6,9 +6,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from konlpy.tag import Twitter
 twitter = Twitter()
+
+
 def file_read():
     center_words = list()
-    with open('center_words.csv','r') as f:
+    with open('center_words.csv', 'r') as f:
         while True:
             line = f.readline()
             if not line:
