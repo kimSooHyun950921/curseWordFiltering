@@ -1,7 +1,7 @@
 import kmeansClustering as km
 import MappingWord
 import sys
-import numpy as np
+import numpy     as np
 from sklearn.metrics.pairwise import cosine_similarity
 
 from konlpy.tag import Twitter
@@ -10,7 +10,7 @@ twitter = Twitter()
 
 def file_read():
     center_words = list()
-    with open('center_words.csv', 'r') as f:
+    with open('./csv_file/center_words.csv', 'r') as f:
         while True:
             line = f.readline()
             if not line:

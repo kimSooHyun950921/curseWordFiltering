@@ -1,12 +1,11 @@
 import csv
-import decompose
 
 import hgtk
 
 import dic
 
 
-DATAFILE = 'offensive_word_db.csv'
+DATAFILE = './csv_file/offensive_word_db.csv'
 
 
 class mapping_word():

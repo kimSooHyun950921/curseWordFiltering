@@ -1,4 +1,4 @@
-import classification
+import levenshtein
 import mapping_word
 
 
@@ -13,5 +13,5 @@ def change_word_to_num(first):
 first = change_word_to_num(first)
 second = change_word_to_num(second)
 
-result = classification.levenshtein(first,second)
+result = levenshtein.levenshteins(first,second)
 print(result)
