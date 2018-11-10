@@ -3,15 +3,16 @@ import decompose
 
 import hgtk
 
-import dic 
+import dic
 
 
 DATAFILE = 'offensive_word_db.csv'
 
 
-class MappingWord(object):
+class mapping_word():
     def __init__(self):
         self.word_list = self.read_word()
+
 
     def read_word(self):
         word_list = list()
@@ -21,13 +22,14 @@ class MappingWord(object):
                 word_list.append(row[0])
         return word_list
 
-    def preprocessing(self, word):
+    def preprocessing(self, word_list):
         replace_char = ['\n', ' ', 'ᴥ']
-
-        result = hgtk.text.decompose(word)
+        decompose_list = ''
+        for word in word_list:
+            decompose_list+=hgtk.text.decompose(word)
 
         for char in replace_char:
-            result = result.replace(char, '')
+            result = decompose_list.replace(char, '')
 
         return result
 
@@ -48,31 +50,20 @@ class MappingWord(object):
             single_eumso.append(changing_word[i])
         return single_eumso
 
-    def num_to_hangeul(self,num):
-        divide_num = num
-        korean = list()
-        how_many_divide = 0
-        while divide_num > 1:
-            rest = divide_num % 10
-            divide_num = divide_num/10
-            if (len(korean)==0 and num !=0) or num>1:
-                korean.append(Dic.one_seat_digit[rest])
-            if how_many_divide > 0:
-                korean.append(Dic.ten_digit[how_many_divide])
-            how_many_divide +=1
-        return korean
-
     def mapping_number(self):
-        word_list = self.read_word()
+        #result = self.preprocessing(self.word_list)
         all_list = list()
-        for i in range(len(word_list)):
-            word = self.multi_eumso_to_single_eumso(word_list[i])
+
+        for word in self.word_list:
+            #print(word)
+            word = self.preprocessing(word)
+            word = self.multi_eumso_to_single_eumso(word)
             all_list.append(word)
         return all_list[:-2]
 
 
 def main():
-    map = MappingWord()
+    map = mapping_word()
     map.mapping_number()
 
 
