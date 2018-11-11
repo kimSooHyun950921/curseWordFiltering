@@ -12,21 +12,18 @@ from sklearn import metrics
 import numpy as np
 from sklearn.metrics import silhouette_samples
 from matplotlib import cm
-#import levenshtein as leven
-import eumjel_levenshtein as leven
+
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import AgglomerativeClustering
 import mglearn
 from sklearn.preprocessing import StandardScaler
+import word_dist_matrix as mat
 mpl.rcParams['axes.unicode_minus'] = False
 
 path = '/usr/share/fonts/truetype/nanum/NanumBarunGothicLight.ttf'
 fontprop = fm.FontProperties(fname=path, size=18).get_name()
 
-def plotSilhouette(X,y_km):
-    silhoutte_avg = silhoulette_score(X,y_km)
-    for n_clusters in range_n_clusters:
-        fig = tools.make_subplots(rows=1,cols=2,print_grid=False,)
+
 
 
 
@@ -148,7 +145,7 @@ def dbs_clus(X):
 def main():
     mapping = mapping_word.mapping_word()
     word_list = mapping.mapping_number()
-    X = get_distance(word_list)
+    X = mat.make_matrix_for_clustering(word_list,"leven")
 
     #print(word_list)
     #print("list",word_list)
