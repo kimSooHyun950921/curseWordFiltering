@@ -19,6 +19,8 @@ import mglearn
 from sklearn.preprocessing import StandardScaler
 import word_dist_matrix as mat
 mpl.rcParams['axes.unicode_minus'] = False
+import csv
+import os
 
 path = '/usr/share/fonts/truetype/nanum/NanumBarunGothicLight.ttf'
 fontprop = fm.FontProperties(fname=path, size=18).get_name()
@@ -139,18 +141,40 @@ def dbs_clus(X):
 
 
 
+def write_file(file_name,X):
+    file_name = file_name+'.csv'
+    with open(file_name,'w') as csvfile:
+        writer = csv.writer(csvfile,delimiter=',')
+        print(len(X))
+        writer.writerows(X)
+
+
+
 
 
 
 def main():
     mapping = mapping_word.mapping_word()
-    word_list = mapping.mapping_number()
-    X = mat.make_matrix_for_clustering(word_list,"leven")
+    select = input("input leven - ")
+    word_list = list()
+    print(select)
+    if select == "jamo":
+        word_list = mapping.read_word()
+    elif select =="leven":
+        word_list =  mapping.mapping_number()
+        word_list = word_list[:-2]
+    print(word_list)
+    if sys.
+    X = mat.make_matrix_for_clustering(word_list,select)
+    s = np.array(X)
+    print(s)
+
+    write_file(select,X)
 
     #print(word_list)
     #print("list",word_list)
-    #elbow(X[0])
-    #lables = clustering(X)
+    elbow(s)
+    lables = kmenas_clustering(s)
     #AggClustering(X)
     #dbs_clus(X)
     #plotSilhouette(X[0],lables)

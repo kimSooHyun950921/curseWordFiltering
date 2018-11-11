@@ -1,10 +1,10 @@
-import levenshtein as leven
-import eumjel_levenshtein as leven
-
+import levenshtein
+import eumjel_levenshtein
+import math
 def get_distance(x,y):
     return math.sqrt(x*x + y*y)
 
-def get_levenshtein(word_list,leven_kind,debug=True):
+def get_levenshtein(word_list,leven_kind,leven,debug=True):
     if debug:
         print("거리 행렬 만들기")
     add_for_graph_x = list()
@@ -15,6 +15,7 @@ def get_levenshtein(word_list,leven_kind,debug=True):
     n = 0
     while i < len(word_list):
         row_list = list()
+        j=0
         while j < len(word_list):
             leven_result = leven.levenshteins(word_list[i],word_list[j])
             if leven_kind == 'leven':
@@ -24,10 +25,10 @@ def get_levenshtein(word_list,leven_kind,debug=True):
             row_list.append(leven_result)
             if debug:
                 print("word",word_list[i],word_list[j],leven_result)
-        add_matrix.append(row_list)
             j+=1
+        add_matrix.append(row_list)
         i+=1
-    return (add_for_graph_x,add_for_grapy_y)
+    return add_matrix
     #return[(add_for_graph_x,add_for_grapy_y,add_tag),(
 def is_which_leven(leven_result):
     try:
@@ -39,4 +40,7 @@ def is_which_leven(leven_result):
 
 
 def make_matrix_for_clustering(word_list,leven_kind):
-    return get_levenshtein(word_list,leven_kind)
+    if leven_kind == 'leven':
+        return get_levenshtein(word_list,leven_kind,levenshtein)
+    elif leven_kind == 'jamo':
+        return get_levenshtein(word_list,leven_kind,eumjel_levenshtein)

@@ -1,7 +1,5 @@
 import csv
-
 import hgtk
-
 import dic
 
 
@@ -23,11 +21,11 @@ class mapping_word():
                 word_list.append(row[0])
         return word_list
 
-    def preprocessing(self,c):
+    def preprocessings(self,c):
         return hgtk.letter.decompose(c)
 
     def preprocessing(self, word_list):
-        replace_char = ['\n', ' ']
+        replace_char = ['\n', ' ','ᴥ']
         decompose_list = ''
         for word in word_list:
             decompose_list+=hgtk.text.decompose(word)

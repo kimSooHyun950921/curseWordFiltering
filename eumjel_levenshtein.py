@@ -1,7 +1,7 @@
 import mapping_word
 import levenshtein
-import enum
-mappig = mapping_word.mapping_number()
+import cost
+mapping = mapping_word.mapping_word()
 
 def split_emjeoul(word,debug=True):
     if debug ==True:
@@ -32,8 +32,8 @@ def substitution_cost(center_c,compare_c,debug=True):
 
 
 def compare_char(center_c,compare_c,debug=True):
-    center_c = mapping.preprocessing(center_c)
-    compare_c = mapping.preprocessing(compare_c)
+    center_c = mapping.preprocessings(center_c)
+    compare_c = mapping.preprocessings(compare_c)
     result = 0
     if is_all_diff(center_c,compare_c):
         result =  enum.beta
