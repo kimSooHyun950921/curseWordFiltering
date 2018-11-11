@@ -22,7 +22,7 @@ class mapping_word():
         return word_list
 
     def preprocessing(self, word_list):
-        replace_char = ['\n', ' ', 'ᴥ']
+        replace_char = ['\n', ' ']
         decompose_list = ''
         for word in word_list:
             decompose_list+=hgtk.text.decompose(word)
@@ -35,7 +35,6 @@ class mapping_word():
     def multi_eumso_to_single_eumso(self, word):
         single_eumso = list()
         multi_eumso = dic.multi_eumso
-
         for i in range(len(word)):
             if word[i] in multi_eumso:
                 changing_word = multi_eumso[word[i]]
@@ -50,7 +49,6 @@ class mapping_word():
         return single_eumso
 
     def mapping_number(self):
-        #result = self.preprocessing(self.word_list)
         all_list = list()
 
         for word in self.word_list:

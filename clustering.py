@@ -13,6 +13,10 @@ import numpy as np
 from sklearn.metrics import silhouette_samples
 from matplotlib import cm
 import levenshtein as leven
+from sklearn.cluster import DBSCAN
+from sklearn.cluster import AgglomerativeClustering
+import mglearn
+from sklearn.preprocessing import StandardScaler
 mpl.rcParams['axes.unicode_minus'] = False
 
 path = '/usr/share/fonts/truetype/nanum/NanumBarunGothicLight.ttf'
@@ -39,26 +43,25 @@ def split_jamo(word):
     return (jaeum,moeum)
 
 
+
+
 #def append_xy(word_list):
 def get_levenshtein(word_list):
-    center_word = word_list[0]
+    center_word = word_list[1024]
     add_for_graph_x = list()
     add_for_grapy_y = list()
     add_tag = list()
-    i = 0
+    i = 1
     n = 0
-    while i < (len(word_list)-1):
-        j = i + 1
-        while j < (len(word_list)):
-            leven_result = leven.levenshteins(word_list[i],word_list[j])
+    while i < len(word_list):
+        print(i)
+        leven_result = leven.levenshteins(center_word,word_list[i])
             #print("word",word_list[i],"leven[0]",leven_result[0],"leven[1]",leven_result[1])
-            print(leven_result)
+        print(leven_result)
+        if leven_result[0] !=0 and leven_result!=0:
             add_for_graph_x.append(leven_result[0])
             add_for_grapy_y.append(leven_result[1])
-            add_tag.append((word_list[i],word_list[j]))
-            j+=1
-        n+=1
-        #print(n)
+            add_tag.append(word_list[i])
         i+=1
     return (add_for_graph_x,add_for_grapy_y)
     #return[(add_for_graph_x,add_for_grapy_y,add_tag),(
@@ -84,16 +87,18 @@ def get_distance(word_list):
     return (X,x_array,y_array)
 
 
-
-def clustering(X):
+#colors =  ['b', 'g', 'r', 'y','c']
+#markers = ['o', 'v', 's', 'x','d']
+def kmenas_clustering(X):
     plt.plot()
-    colors = ['b', 'g', 'r','y']
-    markers = ['o', 'v', 's','x']
-    K = 4
+    colors =  ['b', 'g', 'r', 'y','c']
+    markers = ['o', 'v', 's', 'x','d']
+    K = 2
     kmeans_model = KMeans(n_clusters=K)
     print(kmeans_model)
     cluster_labels = kmeans_model.fit_predict(X[0])
     print(cluster_labels)
+    label = kmeans_model.fit(X[0]).labels_
     range_n_clusters = [2,3,4,5,6]
     plt.plot()
     for i, l in enumerate(kmeans_model.fit(X[0]).labels_):
@@ -102,6 +107,36 @@ def clustering(X):
         plt.xlim([0, 20])
         plt.ylim([0, 10])
     plt.show()
+    print(metrics.silhouette_score(X[0],label,metric='euclidean'))
+
+def agg_clustering(X):
+    scaler = StandardScaler()
+    scaler.fit(X[0])
+    X_scaled = scaler.transform(X[0])
+    agg = AgglomerativeClustering(n_clusters=4)
+    plt.plot()
+    colors =  ['b', 'g', 'r', 'y','c']
+    markers = ['o', 'v', 's', 'x','d']
+    assignment = agg.fit_predict(X_scaled)
+    print(mglearn.discrete_scatter(X_scaled[:, 0], X_scaled[:, 1], assignment))
+    print(metrics.silhouette_score(X_scaled,assignment))
+    plt.legend(["클러스터 0", "클러스터 1", "클러스터 2"], loc="best")
+    plt.xlabel("특성 0")
+    plt.ylabel("특성 1")
+    plt.show()
+
+
+def dbs_clus(X):
+    scaler = StandardScaler()
+    scaler.fit(X[0])
+    #X_scaled = scaler.transform(X[0])
+    #print(X_scaled)
+    dbscan = DBSCAN()
+    clusters = dbscan.fit_predict(X[0])
+    print("클러스터 레이블:\n{}".format(clusters))
+    plt.scatter(X[0][:, 0], X[0][:, 1], c=clusters,  s=50, edgecolors='black')
+    plt.show()
+
 
 
 
@@ -117,7 +152,9 @@ def main():
     #print(word_list)
     #print("list",word_list)
     #elbow(X[0])
-    lables = clustering(X)
+    #lables = clustering(X)
+    AggClustering(X)
+    #dbs_clus(X)
     #plotSilhouette(X[0],lables)
 
     #center_words = make_distance(word_list,mapping)

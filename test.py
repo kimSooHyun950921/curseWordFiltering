@@ -1,6 +1,6 @@
 import levenshtein
 import mapping_word
-
+import sys
 
 first = input("첫번째 단어 - ")
 second = input("두번쨰 단어 - ")
@@ -17,5 +17,5 @@ print(result)
 
 mapping = mapping_word.mapping_word()
 list = mapping.mapping_number()
-smallest_input
-for i in list:
+#smallest_input =
+#for i in list:

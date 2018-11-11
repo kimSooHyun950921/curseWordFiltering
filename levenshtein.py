@@ -19,8 +19,8 @@ def levenshteins(center,compare):
     compare = split_jamo(compare)
     #print("center",center[0],"compare", compare[0])
 
-    jaeum_dif = jamo_levenshtein(center[0],compare[0])*2
-    moeum_dif = jamo_levenshtein(center[1],compare[1])*1.5
+    jaeum_dif = jamo_levenshtein(center[0],compare[0])*1.5
+    moeum_dif = jamo_levenshtein(center[1],compare[1])
     return (jaeum_dif,moeum_dif)
 
 
@@ -37,7 +37,7 @@ def jamo_levenshtein(s1, s2, cost=None, debug=False):
             return dic.jaeum_cost.get(c1)[dic.jaeum.index(c2)]
         elif c1 in dic.moum_list and c2 in dic.moum_list:
     #        print("meoun_list",abs(dic.moeum_cost.get(c1) - dic.moeum_cost.get(c2)))
-            return abs(dic.moeum_cost.get(c1) - dic.moeum_cost.get(c2))
+            return dic.moeum_cost.get(c1)[dic.moeum.index(c2)]
         else:
             return 2
 
