@@ -151,7 +151,7 @@ def main():
     #print("list",word_list)
     #elbow(X[0])
     #lables = clustering(X)
-    AggClustering(X)
+    #AggClustering(X)
     #dbs_clus(X)
     #plotSilhouette(X[0],lables)
 
