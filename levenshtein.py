@@ -1,11 +1,26 @@
 
 import dic
 
+def split_jamo(word):
+    jaeum = list()
+    moeum = list()
+    for i in range(len(word)):
+        if word[i] in dic.jaum_list:
+            jaeum.append(word[i])
+        elif word[i] in dic.moum_list:
+            moeum.append(word[i])
+        else:
+            jaeum.append(word[i])
 
+    #print(jaeum,moeum)
+    return (jaeum,moeum)
 def levenshteins(center,compare):
-    print(center, compare)
-    jaeum_dif = jamo_levenshtein(center[0],compare[0])*1.5
-    moeum_dif = jamo_levenshtein(center[1],compare[1])
+    center = split_jamo(center)
+    compare = split_jamo(compare)
+    #print("center",center[0],"compare", compare[0])
+
+    jaeum_dif = jamo_levenshtein(center[0],compare[0])*2
+    moeum_dif = jamo_levenshtein(center[1],compare[1])*1.5
     return (jaeum_dif,moeum_dif)
 
 
@@ -18,9 +33,11 @@ def jamo_levenshtein(s1, s2, cost=None, debug=False):
         if c1 == c2:
             return 0
         elif c1 in dic.jaum_list and c2 in dic.jaum_list:
+        #    print("jaemu_list",dic.jaeum_cost.get(c1)[dic.jaeum.index(c2)])
             return dic.jaeum_cost.get(c1)[dic.jaeum.index(c2)]
         elif c1 in dic.moum_list and c2 in dic.moum_list:
-            return 1+abs(dic.moeum_cost.get(c1) - dic.moeum_cost.get(c2))
+    #        print("meoun_list",abs(dic.moeum_cost.get(c1) - dic.moeum_cost.get(c2)))
+            return abs(dic.moeum_cost.get(c1) - dic.moeum_cost.get(c2))
         else:
             return 2
 

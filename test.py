@@ -12,6 +12,10 @@ def change_word_to_num(first):
     return word
 first = change_word_to_num(first)
 second = change_word_to_num(second)
-
 result = levenshtein.levenshteins(first,second)
 print(result)
+
+mapping = mapping_word.mapping_word()
+list = mapping.mapping_number()
+smallest_input
+for i in list:
