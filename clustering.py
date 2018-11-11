@@ -12,7 +12,7 @@ from sklearn import metrics
 import numpy as np
 from sklearn.metrics import silhouette_samples
 from matplotlib import cm
-
+from scipy.cluster.hierarchy import dendrogram, ward
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import AgglomerativeClustering
 import mglearn
@@ -21,6 +21,10 @@ import word_dist_matrix as mat
 mpl.rcParams['axes.unicode_minus'] = False
 import csv
 import os
+from scipy.cluster.hierarchy import linkage
+from scipy.cluster.hierarchy import dendrogram
+
+import pandas as pd
 
 path = '/usr/share/fonts/truetype/nanum/NanumBarunGothicLight.ttf'
 fontprop = fm.FontProperties(fname=path, size=18).get_name()
@@ -89,25 +93,25 @@ def get_distance(word_list):
 
 #colors =  ['b', 'g', 'r', 'y','c']
 #markers = ['o', 'v', 's', 'x','d']
-def kmenas_clustering(X):
+def kmeans_clustering(X):
     plt.plot()
     colors =  ['b', 'g', 'r', 'y','c']
     markers = ['o', 'v', 's', 'x','d']
     K = 2
     kmeans_model = KMeans(n_clusters=K)
     print(kmeans_model)
-    cluster_labels = kmeans_model.fit_predict(X[0])
+    cluster_labels = kmeans_model.fit_predict(X)
     print(cluster_labels)
-    label = kmeans_model.fit(X[0]).labels_
+    label = kmeans_model.fit(X).labels_
     range_n_clusters = [2,3,4,5,6]
     plt.plot()
-    for i, l in enumerate(kmeans_model.fit(X[0]).labels_):
+    for i, l in enumerate(kmeans_model.fit(X).labels_):
         print(i,l)
-        plt.plot(X[1][i], X[2][i], color=colors[l], marker=markers[l],ls='None')
+        plt.plot(X[0][i], X[0][i], color=colors[l], marker=markers[l],ls='None')
         plt.xlim([0, 20])
         plt.ylim([0, 10])
     plt.show()
-    print(metrics.silhouette_score(X[0],label,metric='euclidean'))
+    print(metrics.silhouette_score(X,label,metric='euclidean'))
 
 def agg_clustering(X):
     scaler = StandardScaler()
@@ -137,6 +141,18 @@ def dbs_clus(X):
     plt.scatter(X[0][:, 0], X[0][:, 1], c=clusters,  s=50, edgecolors='black')
     plt.show()
 
+def dend(X):
+    row_clusters = linkage(X,method='single')
+    result = pd.DataFrame(row_clusters,
+                 columns=['cluster_1','cluster_2','거리','클러스터 멤버수'],
+                 index =['클러스터 %d'%(i+1) for i in range(row_clusters.shape[0])])
+    print(result)
+    row_dendr = dendrogram(row_clusters )
+    plt.tight_layout()
+    plt.ylabel('euclide distance')
+    plt.show()
+
+
 
 
 
@@ -148,12 +164,7 @@ def write_file(file_name,X):
         print(len(X))
         writer.writerows(X)
 
-
-
-
-
-
-def main():
+def get_word_list():
     mapping = mapping_word.mapping_word()
     select = input("input leven - ")
     word_list = list()
@@ -164,17 +175,59 @@ def main():
         word_list =  mapping.mapping_number()
         word_list = word_list[:-2]
     print(word_list)
-    if sys.
-    X = mat.make_matrix_for_clustering(word_list,select)
-    s = np.array(X)
-    print(s)
+    return (word_list,select)
 
-    write_file(select,X)
+def make_matrix():
+    result = get_word_list()
+    word_list = result[0]
+    select = result[1]
+    X = list()
+    file_name = select+".csv"
+    if os.path.isfile(file_name):
+        X = read_file(file_name)
+
+    else:
+        X = mat.make_matrix_for_clustering(word_list,select)
+        write_file(select,X)
+
+    return X
+
+def read_file(file_name):
+    all_list = list()
+    with open(file_name,"r") as csv_file:
+        while True:
+            line = csv_file.readline()
+            if not line:
+                break
+            line.replace('\n','')
+            list_data = line.split(',')
+            all_list.append(list(list_data))
+    return all_list
+
+
+def start_clustering():
+    X = make_matrix()
+    s = np.array(X,dtype=float)
+    print(s)
+    #elbow(s)
+    #ables = kmeans_clustering(s)(
+    dend(s)
+
+
+
+
+
+
+
+
+def main():
+    start_clustering()
+
+
 
     #print(word_list)
     #print("list",word_list)
-    elbow(s)
-    lables = kmenas_clustering(s)
+    #elbow(s)
     #AggClustering(X)
     #dbs_clus(X)
     #plotSilhouette(X[0],lables)
