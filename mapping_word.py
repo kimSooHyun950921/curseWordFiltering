@@ -13,6 +13,8 @@ class mapping_word():
         self.word_list = self.read_word()
 
 
+
+
     def read_word(self):
         word_list = list()
         with open(DATAFILE) as f:
@@ -20,6 +22,9 @@ class mapping_word():
             for row in reader:
                 word_list.append(row[0])
         return word_list
+
+    def preprocessing(self,c):
+        return hgtk.letter.decompose(c)
 
     def preprocessing(self, word_list):
         replace_char = ['\n', ' ']
@@ -56,7 +61,7 @@ class mapping_word():
             word = self.preprocessing(word)
             word = self.multi_eumso_to_single_eumso(word)
             all_list.append(word)
-        return all_list[:-2]
+        return all_list
 
 
 def main():

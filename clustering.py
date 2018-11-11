@@ -12,7 +12,8 @@ from sklearn import metrics
 import numpy as np
 from sklearn.metrics import silhouette_samples
 from matplotlib import cm
-import levenshtein as leven
+#import levenshtein as leven
+import eumjel_levenshtein as leven
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import AgglomerativeClustering
 import mglearn
