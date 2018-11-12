@@ -113,20 +113,16 @@ def kmeans_clustering(X):
     plt.show()
     print(metrics.silhouette_score(X,label,metric='euclidean'))
 
-def agg_clustering(X):
+def agg_clustering(X,n):
     scaler = StandardScaler()
-    scaler.fit(X[0])
-    X_scaled = scaler.transform(X[0])
-    agg = AgglomerativeClustering(n_clusters=4)
+    scaler.fit(X)
+    X_scaled =X# scaler.transform(X)
+    agg = AgglomerativeClustering(n_clusters=n,affinity='euclidean',linkage='ward')
     plt.plot()
-    colors =  ['b', 'g', 'r', 'y','c']
-    markers = ['o', 'v', 's', 'x','d']
+
     assignment = agg.fit_predict(X_scaled)
     print(mglearn.discrete_scatter(X_scaled[:, 0], X_scaled[:, 1], assignment))
     print(metrics.silhouette_score(X_scaled,assignment))
-    plt.legend(["클러스터 0", "클러스터 1", "클러스터 2"], loc="best")
-    plt.xlabel("특성 0")
-    plt.ylabel("특성 1")
     plt.show()
 
 
@@ -142,15 +138,16 @@ def dbs_clus(X):
     plt.show()
 
 def dend(X):
-    row_clusters = linkage(X,method='single')
+    row_clusters = linkage(X,method='ward')
     result = pd.DataFrame(row_clusters,
                  columns=['cluster_1','cluster_2','거리','클러스터 멤버수'],
                  index =['클러스터 %d'%(i+1) for i in range(row_clusters.shape[0])])
-    print(result)
+    #print(result)
     row_dendr = dendrogram(row_clusters )
     plt.tight_layout()
     plt.ylabel('euclide distance')
     plt.show()
+    agg_clustering(X,2)
 
 
 
@@ -158,7 +155,7 @@ def dend(X):
 
 
 def write_file(file_name,X):
-    file_name = file_name+'.csv'
+    file_name = ''+file_name+'.csv'
     with open(file_name,'w') as csvfile:
         writer = csv.writer(csvfile,delimiter=',')
         print(len(X))
@@ -166,7 +163,8 @@ def write_file(file_name,X):
 
 def get_word_list():
     mapping = mapping_word.mapping_word()
-    select = input("input leven - ")
+    #select = input("input leven - ")
+    select = "leven"
     word_list = list()
     print(select)
     if select == "jamo":
@@ -182,7 +180,7 @@ def make_matrix():
     word_list = result[0]
     select = result[1]
     X = list()
-    file_name = select+".csv"
+    file_name = ''+select+".csv"
     if os.path.isfile(file_name):
         X = read_file(file_name)
 
